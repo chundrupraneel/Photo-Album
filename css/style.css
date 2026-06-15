@@ -23,6 +23,80 @@ html, body {
   display: none !important;
 }
 
+.app {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.app.visible {
+  opacity: 1;
+}
+
+/* ===================== INTRO SPLASH ===================== */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.7s ease;
+}
+
+.intro-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3.5rem, 12vw, 6.5rem);
+  letter-spacing: 4px;
+  color: var(--nf-red);
+  text-transform: uppercase;
+  transform: scale(0.3);
+  opacity: 0;
+  filter: brightness(1) drop-shadow(0 0 0px rgba(229, 9, 20, 0));
+  animation: intro-pop 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+@keyframes intro-pop {
+  0%   { transform: scale(0.3); opacity: 0; filter: brightness(1) drop-shadow(0 0 0px rgba(229, 9, 20, 0)); }
+  35%  { transform: scale(1.25); opacity: 1; filter: brightness(2.4) drop-shadow(0 0 50px rgba(229, 9, 20, 0.9)); }
+  55%  { transform: scale(0.95); filter: brightness(1.4) drop-shadow(0 0 25px rgba(229, 9, 20, 0.6)); }
+  75%  { transform: scale(1.05); filter: brightness(1.1) drop-shadow(0 0 10px rgba(229, 9, 20, 0.3)); }
+  100% { transform: scale(1); opacity: 1; filter: brightness(1) drop-shadow(0 0 0px rgba(229, 9, 20, 0)); }
+}
+
+.intro-bar {
+  margin-top: 2.2rem;
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  opacity: 0;
+  animation: intro-bar-fade 0.4s ease forwards 0.7s;
+}
+
+.intro-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--nf-red);
+  animation: intro-bar-fill 1.5s ease-out forwards 0.7s;
+}
+
+@keyframes intro-bar-fade {
+  to { opacity: 1; }
+}
+
+@keyframes intro-bar-fill {
+  to { width: 100%; }
+}
+
 /* ===================== PROFILE SCREEN ===================== */
 .profile-screen {
   min-height: 100vh;
@@ -31,6 +105,19 @@ html, body {
   justify-content: center;
   background: var(--nf-black);
   text-align: center;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.profile-screen.visible {
+  opacity: 1;
+}
+
+.profile-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.08);
+  pointer-events: none;
 }
 
 .profile-heading {
@@ -483,10 +570,16 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .modal-overlay.active {
   display: flex;
+}
+
+.modal-overlay.active.visible {
+  opacity: 1;
 }
 
 .modal {
@@ -497,12 +590,6 @@ html, body {
   overflow-y: auto;
   border-radius: 8px;
   position: relative;
-  animation: modalIn 0.25s ease;
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
 }
 
 .modal-close {
@@ -653,10 +740,16 @@ html, body {
   z-index: 300;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .viewer-overlay.active {
   display: flex;
+}
+
+.viewer-overlay.active.visible {
+  opacity: 1;
 }
 
 .viewer-progress {

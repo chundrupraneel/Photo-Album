@@ -80,6 +80,7 @@
 
     document.getElementById('profile-name').textContent = PROFILE_NAME;
 
+    setupIntro();
     setupProfileScreen();
     setupNavbar();
     setupModal();
@@ -91,12 +92,123 @@
   }
 
   // -------------------------------------------------------------------
+  // INTRO SPLASH (Netflix-style "ta-dum")
+  // -------------------------------------------------------------------
+  let audioCtx = null;
+  let taDumPlayed = false;
+
+  function getAudioCtx() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    return audioCtx;
+  }
+
+  // Synthesizes a two-note brass-style "ta-dum" swell.
+  function scheduleTaDum(ctx) {
+    const now = ctx.currentTime;
+
+    function note(freq, start, duration, peakGain) {
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      osc1.type = 'sawtooth';
+      osc2.type = 'sine';
+      osc1.frequency.value = freq;
+      osc2.frequency.value = freq * 2;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 900;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, now + start);
+      gain.gain.linearRampToValueAtTime(peakGain, now + start + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + start + duration);
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc1.start(now + start);
+      osc2.start(now + start);
+      osc1.stop(now + start + duration + 0.1);
+      osc2.stop(now + start + duration + 0.1);
+    }
+
+    note(98, 0, 0.4, 0.25);     // "ta"
+    note(73.42, 0.35, 1.5, 0.3); // "dum"
+  }
+
+  function playTaDum() {
+    if (taDumPlayed) return;
+    const ctx = getAudioCtx();
+    if (!ctx || ctx.state === 'suspended') return;
+    taDumPlayed = true;
+    try {
+      scheduleTaDum(ctx);
+    } catch (e) {
+      /* ignore audio errors */
+    }
+  }
+
+  function tryResumeAndPlay() {
+    if (taDumPlayed) return;
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    ctx.resume().then(() => {
+      if (!taDumPlayed) {
+        taDumPlayed = true;
+        try {
+          scheduleTaDum(ctx);
+        } catch (e) {
+          /* ignore audio errors */
+        }
+      }
+    }).catch(() => {});
+  }
+
+  function setupIntro() {
+    const intro = document.getElementById('intro-screen');
+    let finished = false;
+
+    function finishIntro() {
+      if (finished) return;
+      finished = true;
+      intro.classList.add('fade-out');
+      document.getElementById('profile-screen').classList.add('visible');
+      setTimeout(() => intro.remove(), 800);
+    }
+
+    playTaDum();
+    document.addEventListener('click', tryResumeAndPlay, { once: true });
+    document.addEventListener('keydown', tryResumeAndPlay, { once: true });
+    document.addEventListener('touchstart', tryResumeAndPlay, { once: true });
+
+    intro.addEventListener('click', finishIntro);
+    setTimeout(finishIntro, 2300);
+  }
+
+  // -------------------------------------------------------------------
   // PROFILE SCREEN
   // -------------------------------------------------------------------
   function setupProfileScreen() {
     document.getElementById('profile-select').addEventListener('click', () => {
-      document.getElementById('profile-screen').classList.add('hidden');
-      document.getElementById('app').classList.remove('hidden');
+      const profileScreen = document.getElementById('profile-screen');
+      const app = document.getElementById('app');
+
+      profileScreen.classList.add('fade-out');
+
+      setTimeout(() => {
+        profileScreen.classList.add('hidden');
+        app.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            app.classList.add('visible');
+          });
+        });
+      }, 500);
     });
   }
 
@@ -258,7 +370,7 @@
     media.appendChild(label);
     card.appendChild(media);
 
-    card.addEventListener('click', () => openModal(item));
+    card.addEventListener('click', () => openModal(item, card));
 
     return card;
   }
@@ -273,7 +385,7 @@
     });
   }
 
-  function openModal(item) {
+  function openModal(item, originEl) {
     currentModalItem = item;
 
     const backdrop = document.getElementById('modal-backdrop');
@@ -316,7 +428,34 @@
       photoList.appendChild(thumb);
     });
 
-    document.getElementById('modal-overlay').classList.add('active');
+    const overlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal');
+    overlay.classList.add('active');
+
+    // Netflix-style "expand from card" transition: animate the modal
+    // growing out from the position/size of the clicked card.
+    modal.style.transition = 'none';
+    if (originEl) {
+      const cardRect = originEl.getBoundingClientRect();
+      const modalRect = modal.getBoundingClientRect();
+      const scaleX = cardRect.width / modalRect.width;
+      const scaleY = cardRect.height / modalRect.height;
+      const translateX = (cardRect.left + cardRect.width / 2) - (modalRect.left + modalRect.width / 2);
+      const translateY = (cardRect.top + cardRect.height / 2) - (modalRect.top + modalRect.height / 2);
+      modal.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})`;
+    } else {
+      modal.style.transform = 'scale(0.85)';
+    }
+    modal.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        overlay.classList.add('visible');
+        modal.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease';
+        modal.style.transform = 'translate(0, 0) scale(1, 1)';
+        modal.style.opacity = '1';
+      });
+    });
   }
 
   function setMediaThumb(el, photo) {
@@ -348,7 +487,15 @@
   }
 
   function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('active');
+    const overlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal');
+    overlay.classList.remove('visible');
+    setTimeout(() => {
+      overlay.classList.remove('active');
+      modal.style.transition = '';
+      modal.style.transform = '';
+      modal.style.opacity = '';
+    }, 250);
     currentModalItem = null;
   }
 
@@ -385,13 +532,19 @@
     viewerPaused = false;
 
     document.getElementById('viewer-occasion').textContent = item.title;
-    document.getElementById('viewer-overlay').classList.add('active');
+    const overlay = document.getElementById('viewer-overlay');
+    overlay.classList.add('active');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => overlay.classList.add('visible'));
+    });
     renderViewerSlide();
     startViewerTimer();
   }
 
   function closeViewer() {
-    document.getElementById('viewer-overlay').classList.remove('active');
+    const overlay = document.getElementById('viewer-overlay');
+    overlay.classList.remove('visible');
+    setTimeout(() => overlay.classList.remove('active'), 250);
     clearInterval(viewerTimer);
     viewerTimer = null;
     viewerItem = null;
