@@ -141,7 +141,9 @@
     note(73.42, 0.35, 1.5, 0.3); // "dum"
   }
 
-  function playTaDum() {
+  // Plays the real Netflix sound clip (audio/ta-dum.mp3). Falls back to
+  // a synthesized chord only if that file is missing or fails to play.
+  function playSynthFallback() {
     if (taDumPlayed) return;
     const ctx = getAudioCtx();
     if (!ctx || ctx.state === 'suspended') return;
@@ -153,20 +155,42 @@
     }
   }
 
+  function playTaDum() {
+    if (taDumPlayed) return;
+    const audio = document.getElementById('intro-sound');
+    if (audio) {
+      audio.currentTime = 0;
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(() => { taDumPlayed = true; }).catch(playSynthFallback);
+      } else {
+        taDumPlayed = true;
+      }
+    } else {
+      playSynthFallback();
+    }
+  }
+
   function tryResumeAndPlay() {
     if (taDumPlayed) return;
-    const ctx = getAudioCtx();
-    if (!ctx) return;
-    ctx.resume().then(() => {
-      if (!taDumPlayed) {
+    const audio = document.getElementById('intro-sound');
+    if (audio) {
+      audio.currentTime = 0;
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(() => { taDumPlayed = true; }).catch(() => {
+          const ctx = getAudioCtx();
+          if (!ctx) return;
+          ctx.resume().then(playSynthFallback).catch(() => {});
+        });
+      } else {
         taDumPlayed = true;
-        try {
-          scheduleTaDum(ctx);
-        } catch (e) {
-          /* ignore audio errors */
-        }
       }
-    }).catch(() => {});
+    } else {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      ctx.resume().then(playSynthFallback).catch(() => {});
+    }
   }
 
   function setupIntro() {
