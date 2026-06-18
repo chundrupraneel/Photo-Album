@@ -207,7 +207,7 @@ const CATEGORIES = [
           "#e50914",
           "#6e0a10"
         ],
-        "cover": "photos/1 Year/IMG_3970.JPG",
+        "cover": "photos/1 Year/IMG_3980.JPG",
         "featured": true,
         "photos": [
           {
