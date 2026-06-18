@@ -47,7 +47,13 @@ const CATEGORIES = [
           "#16a085",
           "#0a3d33"
         ],
-        "cover": "photos/First Month/20241009_002558_E3BE2D.JPEG",
+        "cover": "photos/First Month/IMG_6953.jpg",
+        "covers": [
+          "photos/First Month/IMG_6953.jpg",
+          "photos/First Month/IMG_4508.jpg",
+          "photos/First Month/IMG_6964.jpg",
+          "photos/First Month/IMG_7137.jpg"
+        ],
         "photos": [
           {
             "src": "photos/First Month/20241009_002558_E3BE2D.JPEG",
@@ -148,6 +154,11 @@ const CATEGORIES = [
           "#5e1a3a"
         ],
         "cover": "photos/6 Month/IMG_8616.JPG",
+        "covers": [
+          "photos/6 Month/IMG_8616.JPG",
+          "photos/6 Month/IMG_8621.JPG",
+          "photos/6 Month/IMG_8657.JPG"
+        ],
         "photos": [
           {
             "src": "photos/6 Month/IMG_8616.JPG",
@@ -208,6 +219,10 @@ const CATEGORIES = [
           "#6e0a10"
         ],
         "cover": "photos/1 Year/IMG_3980.JPG",
+        "covers": [
+          "photos/1 Year/IMG_3980.JPG",
+          "photos/1 Year/IMG_3974.JPG"
+        ],
         "featured": true,
         "photos": [
           {
@@ -249,6 +264,11 @@ const CATEGORIES = [
           "#7a6209"
         ],
         "cover": "photos/Graduation!!!/0B7E7967-C23E-424E-924F-2349BF5E44B7.JPG",
+        "covers": [
+          "photos/Graduation!!!/0B7E7967-C23E-424E-924F-2349BF5E44B7.JPG",
+          "photos/Graduation!!!/DSC_0086.JPG",
+          "photos/Graduation!!!/IMG_3342.JPG"
+        ],
         "photos": [
           {
             "src": "photos/Graduation!!!/0B7E7967-C23E-424E-924F-2349BF5E44B7.JPG",
@@ -353,7 +373,13 @@ const CATEGORIES = [
           "#d35400",
           "#5a2406"
         ],
-        "cover": "photos/Food Dates/IMG_0705.jpg",
+        "cover": "photos/Food Dates/IMG_8412.jpg",
+        "covers": [
+          "photos/Food Dates/IMG_8412.jpg",
+          "photos/Food Dates/IMG_7253.jpg",
+          "photos/Food Dates/IMG_5663.jpg",
+          "photos/Food Dates/IMG_7562.jpg"
+        ],
         "photos": [
           {
             "src": "photos/Food Dates/IMG_0705.jpg",
@@ -514,6 +540,12 @@ const CATEGORIES = [
           "#3b1d4f"
         ],
         "cover": "photos/Dressing Up and Going Out/AA0F263E-F89A-4F0B-9571-557ED93CED5D.JPG",
+        "covers": [
+          "photos/Dressing Up and Going Out/AA0F263E-F89A-4F0B-9571-557ED93CED5D.JPG",
+          "photos/Dressing Up and Going Out/IMG_0953.jpg",
+          "photos/Dressing Up and Going Out/IMG_5292.jpg",
+          "photos/Dressing Up and Going Out/IMG_4396.jpg"
+        ],
         "photos": [
           {
             "src": "photos/Dressing Up and Going Out/AA0F263E-F89A-4F0B-9571-557ED93CED5D.JPG",
@@ -683,7 +715,11 @@ const CATEGORIES = [
           "#6f4e37",
           "#2e1f17"
         ],
-        "cover": "photos/Cooking Experts/IMG_0316.jpg",
+        "cover": "photos/Cooking Experts/IMG_1057.jpg",
+        "covers": [
+          "photos/Cooking Experts/IMG_1057.jpg",
+          "photos/Cooking Experts/IMG_1059.jpg"
+        ],
         "photos": [
           {
             "src": "photos/Cooking Experts/IMG_0316.jpg",
@@ -763,7 +799,12 @@ const CATEGORIES = [
           "#ff6b6b",
           "#5b2c6f"
         ],
-        "cover": "photos/Holi/IMG_2539.jpeg",
+        "cover": "photos/Holi/IMG_8985.jpg",
+        "covers": [
+          "photos/Holi/IMG_8985.jpg",
+          "photos/Holi/IMG_8993.jpg",
+          "photos/Holi/IMG_2539.jpeg"
+        ],
         "photos": [
           {
             "src": "photos/Holi/IMG_2539.jpeg",
@@ -879,6 +920,10 @@ const CATEGORIES = [
           "#4d1610"
         ],
         "cover": "photos/Valentine's/IMG_1053.jpg",
+        "covers": [
+          "photos/Valentine's/IMG_1053.jpg",
+          "photos/Valentine's/IMG_1059.jpg"
+        ],
         "photos": [
           {
             "src": "photos/Valentine's/IMG_1053.jpg",
@@ -954,6 +999,10 @@ const CATEGORIES = [
           "#0e2f47"
         ],
         "cover": "photos/Sports Games/IMG_3157.JPG",
+        "covers": [
+          "photos/Sports Games/IMG_3157.JPG",
+          "photos/Sports Games/IMG_4801.JPG"
+        ],
         "photos": [
           {
             "src": "photos/Sports Games/IMG_3157.JPG",
@@ -1063,7 +1112,12 @@ const CATEGORIES = [
           "#f39c12",
           "#7a4d09"
         ],
-        "cover": "photos/THON 2026/IMG_0188.jpeg",
+        "cover": "photos/THON 2026/IMG_0410.JPG",
+        "covers": [
+          "photos/THON 2026/IMG_0410.JPG",
+          "photos/THON 2026/IMG_1236.jpeg",
+          "photos/THON 2026/IMG_7339.jpeg"
+        ],
         "photos": [
           {
             "src": "photos/THON 2026/20260220_161607.mov",
@@ -1234,6 +1288,12 @@ const CATEGORIES = [
           "#0f1a24"
         ],
         "cover": "photos/Formals/034D07D5-C2D7-40AD-8D32-10A0B472C955.JPG",
+        "covers": [
+          "photos/Formals/034D07D5-C2D7-40AD-8D32-10A0B472C955.JPG",
+          "photos/Formals/IMG_4628.jpg",
+          "photos/Formals/IMG_8975.jpg",
+          "photos/Formals/IMG_8972.jpg"
+        ],
         "photos": [
           {
             "src": "photos/Formals/034D07D5-C2D7-40AD-8D32-10A0B472C955.JPG",
@@ -1334,6 +1394,10 @@ const CATEGORIES = [
           "#123c22"
         ],
         "cover": "photos/SASA/9985F70D-D793-4273-A588-3F42E8879316.JPG",
+        "covers": [
+          "photos/SASA/9985F70D-D793-4273-A588-3F42E8879316.JPG",
+          "photos/SASA/IMG_0417.JPG"
+        ],
         "photos": [
           {
             "src": "photos/SASA/9985F70D-D793-4273-A588-3F42E8879316.JPG",
@@ -1413,7 +1477,12 @@ const CATEGORIES = [
           "#fd79a8",
           "#5a2436"
         ],
-        "cover": "photos/Cuddles and Kisses/2024-10-23_011542.JPG",
+        "cover": "photos/Cuddles and Kisses/IMG_8794.JPG",
+        "covers": [
+          "photos/Cuddles and Kisses/IMG_8794.JPG",
+          "photos/Cuddles and Kisses/IMG_4296.JPG",
+          "photos/Cuddles and Kisses/2024-10-23_011542.JPG"
+        ],
         "photos": [
           {
             "src": "photos/Cuddles and Kisses/2024-10-23_011542.JPG",
@@ -1539,6 +1608,10 @@ const CATEGORIES = [
           "#6e4f0f"
         ],
         "cover": "photos/Silly Pics/IMG_0549.JPG",
+        "covers": [
+          "photos/Silly Pics/IMG_0549.JPG",
+          "photos/Silly Pics/IMG_8339.JPG"
+        ],
         "photos": [
           {
             "src": "photos/Silly Pics/IMG_0549.JPG",
@@ -1674,6 +1747,12 @@ const CATEGORIES = [
           "#0a4338"
         ],
         "cover": "photos/FaceTimes/IMG_1072.jpg",
+        "covers": [
+          "photos/FaceTimes/IMG_1072.jpg",
+          "photos/FaceTimes/lp_image 9.jpg",
+          "photos/FaceTimes/lp_image 14.jpg",
+          "photos/FaceTimes/lp_image 15.jpg"
+        ],
         "photos": [
           {
             "src": "photos/FaceTimes/IMG_1072.jpg",

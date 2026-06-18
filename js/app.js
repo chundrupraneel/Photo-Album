@@ -388,6 +388,13 @@
     return row;
   }
 
+  function randomCover(item) {
+    if (item.covers && item.covers.length) {
+      return item.covers[Math.floor(Math.random() * item.covers.length)];
+    }
+    return item.cover;
+  }
+
   function buildCard(item) {
     const card = document.createElement('div');
     card.className = 'card';
@@ -396,7 +403,7 @@
 
     const media = document.createElement('div');
     media.className = 'card-media';
-    setMedia(media, item.cover, item.icon, item.gradient);
+    setMedia(media, randomCover(item), item.icon, item.gradient);
 
     const heart = document.createElement('span');
     heart.className = 'card-heart';
@@ -430,7 +437,7 @@
     currentModalItem = item;
 
     const backdrop = document.getElementById('modal-backdrop');
-    setMedia(backdrop, item.cover, item.icon, item.gradient);
+    setMedia(backdrop, randomCover(item), item.icon, item.gradient);
     const placeholderIcon = backdrop.querySelector('.card-placeholder-icon');
     if (placeholderIcon) {
       placeholderIcon.style.fontSize = '4rem';
