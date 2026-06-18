@@ -15,6 +15,7 @@
   let viewerIndex = 0;
   let viewerTimer = null;
   let viewerPaused = false;
+  let viewerIsVideo = false;
   const VIEWER_INTERVAL = 5000; // ms per photo
 
   // -------------------------------------------------------------------
@@ -48,6 +49,10 @@
     span.className = className || 'card-placeholder-icon';
     span.textContent = icon || '🎬';
     el.appendChild(span);
+  }
+
+  function isVideoSrc(src) {
+    return !!src && /\.(mov|mp4|webm)$/i.test(src);
   }
 
   function findItem(id) {
@@ -421,8 +426,12 @@
 
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-date').textContent = item.date || '';
-    document.getElementById('modal-count').textContent =
-      `${item.photos.length} photo${item.photos.length === 1 ? '' : 's'}`;
+    const videoCount = item.photos.filter((p) => isVideoSrc(p.src)).length;
+    const photoCount = item.photos.length - videoCount;
+    const countParts = [];
+    if (photoCount) countParts.push(`${photoCount} photo${photoCount === 1 ? '' : 's'}`);
+    if (videoCount) countParts.push(`${videoCount} video${videoCount === 1 ? '' : 's'}`);
+    document.getElementById('modal-count').textContent = countParts.join(', ');
     document.getElementById('modal-description').textContent = item.description || '';
 
     document.getElementById('modal-play').onclick = () => openViewer(item, 0);
@@ -443,10 +452,12 @@
       thumb.className = 'photo-thumb';
       setMediaThumb(thumb, photo);
 
-      const caption = document.createElement('div');
-      caption.className = 'photo-caption';
-      caption.textContent = photo.caption || '';
-      thumb.appendChild(caption);
+      if (photo.caption) {
+        const caption = document.createElement('div');
+        caption.className = 'photo-caption';
+        caption.textContent = photo.caption;
+        thumb.appendChild(caption);
+      }
 
       thumb.addEventListener('click', () => openViewer(item, index));
       photoList.appendChild(thumb);
@@ -484,7 +495,21 @@
 
   function setMediaThumb(el, photo) {
     el.innerHTML = '';
-    if (photo.src) {
+    if (photo.src && isVideoSrc(photo.src)) {
+      const video = document.createElement('video');
+      video.src = photo.src;
+      video.muted = true;
+      video.preload = 'metadata';
+      video.onerror = () => {
+        video.remove();
+        addPlaceholderIcon(el, photo.icon, 'photo-placeholder-icon');
+      };
+      el.appendChild(video);
+      const badge = document.createElement('span');
+      badge.className = 'photo-video-badge';
+      badge.textContent = '▶';
+      el.appendChild(badge);
+    } else if (photo.src) {
       const img = document.createElement('img');
       img.src = photo.src;
       img.alt = '';
@@ -562,7 +587,6 @@
       requestAnimationFrame(() => overlay.classList.add('visible'));
     });
     renderViewerSlide();
-    startViewerTimer();
   }
 
   function closeViewer() {
@@ -582,7 +606,20 @@
     const grad = viewerItem.gradient || ['#333', '#111'];
     stage.style.background = `linear-gradient(135deg, ${grad[0]}, ${grad[1]})`;
 
-    if (photo.src) {
+    viewerIsVideo = isVideoSrc(photo.src);
+
+    if (photo.src && viewerIsVideo) {
+      const video = document.createElement('video');
+      video.src = photo.src;
+      video.controls = true;
+      video.playsInline = true;
+      video.className = 'viewer-video';
+      video.onerror = () => {
+        video.remove();
+        addPlaceholderIcon(stage, photo.icon, 'viewer-placeholder-icon');
+      };
+      stage.appendChild(video);
+    } else if (photo.src) {
       const img = document.createElement('img');
       img.src = photo.src;
       img.alt = '';
@@ -596,7 +633,19 @@
     }
 
     document.getElementById('viewer-caption').textContent = photo.caption || '';
-    resetProgressBar();
+
+    const playpauseBtn = document.getElementById('viewer-playpause');
+    if (viewerIsVideo) {
+      clearInterval(viewerTimer);
+      viewerTimer = null;
+      pauseProgressBar();
+      document.getElementById('viewer-progress').style.transition = 'none';
+      document.getElementById('viewer-progress').style.width = '0%';
+      playpauseBtn.classList.add('hidden');
+    } else {
+      playpauseBtn.classList.remove('hidden');
+      startViewerTimer();
+    }
   }
 
   function stepViewer(direction) {
@@ -604,10 +653,10 @@
     const total = viewerItem.photos.length;
     viewerIndex = (viewerIndex + direction + total) % total;
     renderViewerSlide();
-    startViewerTimer();
   }
 
   function togglePause() {
+    if (viewerIsVideo) return;
     viewerPaused = !viewerPaused;
     document.getElementById('viewer-playpause').textContent = viewerPaused ? '▶' : '⏸';
     if (viewerPaused) {

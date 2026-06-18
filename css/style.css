@@ -155,6 +155,13 @@ html, body {
   font-size: 4rem;
   border: 3px solid transparent;
   transition: border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profile-card:hover .profile-avatar {
@@ -268,6 +275,13 @@ html, body {
   justify-content: center;
   font-size: 1.1rem;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ===================== HERO ===================== */
@@ -697,12 +711,30 @@ html, body {
   transition: transform 0.15s ease;
 }
 
-.photo-thumb img {
+.photo-thumb img,
+.photo-thumb video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   position: absolute;
   inset: 0;
+}
+
+.photo-video-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  pointer-events: none;
 }
 
 .photo-thumb:hover {
@@ -789,6 +821,14 @@ html, body {
 @keyframes kenburns {
   from { transform: scale(1); }
   to { transform: scale(1.12); }
+}
+
+.viewer-video {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1;
 }
 
 .viewer-placeholder-icon {
